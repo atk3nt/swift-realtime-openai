@@ -552,6 +552,7 @@ extension ServerEvent: Identifiable {
 			case let .inputAudioBufferCleared(id): id
 			case let .inputAudioBufferSpeechStarted(id, _, _): id
 			case let .inputAudioBufferSpeechStopped(id, _, _): id
+			case let .outputAudioBufferCleared(id, _): id
 			case let .inputAudioBufferTimeoutTriggered(id, _, _, _): id
 			case let .outputAudioBufferStarted(id, _): id
 			case let .outputAudioBufferStopped(id, _): id
