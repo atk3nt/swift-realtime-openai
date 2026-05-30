@@ -86,6 +86,11 @@ public final class Conversation: @unchecked Sendable {
 		client.disconnect()
 		errorStream.finish()
 	}
+	public func disconnect() {
+      task?.cancel()
+      client.disconnect()
+      errorStream.finish()
+  }
 
 	public func connect(using request: URLRequest) async throws {
 		await AVAudioApplication.requestRecordPermission()
