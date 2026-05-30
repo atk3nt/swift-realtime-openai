@@ -188,12 +188,18 @@ private extension Conversation {
 			case let .conversationItemDeleted(_, itemId):
 				entries.removeAll { $0.id == itemId }
 			case let .conversationItemInputAudioTranscriptionCompleted(_, itemId, contentIndex, transcript, _, _):
-				updateEvent(id: itemId) { message in
-					guard case let .inputAudio(audio) = message.content[contentIndex] else { return }
-
-					message.content[contentIndex] = .inputAudio(.init(audio: audio.audio, transcript: transcript))
-				}
-			case let .conversationItemInputAudioTranscriptionFailed(_, _, _, error):
+      updateEvent(id: itemId) { message in
+          guard case let .inputAudio(audio) = message.content[contentIndex] else { return }
+          
+          message.content[contentIndex] = .inputAudio(.init(audio: audio.audio, transcript: transcript))
+      }   
+  case let .conversationItemInputAudioTranscriptionDelta(_, itemId, contentIndex, delta, _):
+      updateEvent(id: itemId) { message in
+          guard case let .inputAudio(audio) = message.content[contentIndex] else { return }
+          let existing = audio.transcript ?? ""
+          message.content[contentIndex] = .inputAudio(.init(audio: audio.audio, transcript: existing + delta))
+      }
+  case let .conversationItemInputAudioTranscriptionFailed(_, _, _, error):
 				errorStream.yield(error)
 				print("Received error: \(error)")
 			case let .responseCreated(_, response):
